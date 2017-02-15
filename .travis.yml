@@ -16,7 +16,7 @@ before_script:
     # The version output of vimpager depends of the tags in the repository so
     # we need to fetch them before running the tests.  Currently all tags are
     # fetched.  TODO: Only fetch the latest tag.
-    - git fetch --unshallow --tags
+    - git fetch --unshallow --tags || true
 
 script:
     # The target install-deb also installs the sharutils package that contains
