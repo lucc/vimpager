@@ -8,9 +8,9 @@ env:
 install:
     # Update to a new version of lintian as the one on trusty is quite old.
     # This also runs apt-get update.
-    - [[ "$JOB" = lintian ]] && scripts/update_lintian
+    - ( [[ "$JOB" = lintian ]] && scripts/update_lintian )
     # Install the test suite manually as there is no package for it on trusty.
-    - [[ "$JOB" = test ]] && git clone https://github.com/sstephenson/bats.git && cd bats && ./install.sh ~/.local
+    - ( [[ "$JOB" = test ]] && git clone https://github.com/sstephenson/bats.git && cd bats && ./install.sh ~/.local )
 
 before_script:
     # The version output of vimpager depends of the tags in the repository so
@@ -22,11 +22,11 @@ script:
     # The target install-deb also installs the sharutils package that contains
     # uuencode.  Without DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage (which is
     # run by install-deb) would also run the tests.
-    - [[ "$JOB" = lintian ]] && sudo make install-deb CLEAN_BUILD_DEPS=0 DEB_BUILD_OPTIONS=nocheck
+    - ( [[ "$JOB" = lintian ]] && sudo make install-deb CLEAN_BUILD_DEPS=0 DEB_BUILD_OPTIONS=nocheck )
     # lintian has to be run after make install-deb as it needs the file that
     # are created by the makefile.
-    - [[ "$JOB" = lintian ]] && lintian --profile debian -i --fail-on-warnings -EvIL +pedantic ../vimpager*.changes
-    - [[ "$JOB" = test ]] && make all
-    - [[ "$JOB" = test ]] && make test
+    - ( [[ "$JOB" = lintian ]] && lintian --profile debian -i --fail-on-warnings -EvIL +pedantic ../vimpager*.changes )
+    - ( [[ "$JOB" = test ]] && make all )
+    - ( [[ "$JOB" = test ]] && make test )
 
 # vim: sw=4
